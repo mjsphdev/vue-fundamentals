@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Syntax and Expressions</title>
+    <link rel="stylesheet" href="./main.css">
+</head>
+<body>
+    <div id="app">
+        <div class="header">
+            <h1>{{ header }}</h1>
+        </div>
+        <button v-if="editing" class="btn" @click="doEdit(false)">
+            Cancel
+        </button>
+        <button v-else class="btn btn-primary" @click="doEdit(true)">
+            Add Item
+        </button>
+        <form 
+            class="add-item-form"
+            v-if="editing"
+            v-on:submit.prevent="saveItem" 
+        >
+            <input 
+                v-model.trim="newItem" 
+                type="text" 
+                placeholder="Add an item"
+            >
+
+            Priority:
+            <label>
+                <input type="checkbox" v-model="newItemHighPriority">
+                High Priority
+            </label>
+            <button 
+                :disabled="newItem.length < 5"
+                class="btn btn-primary">
+                Save Item
+            </button>
+        </form>
+        
+        <ul>
+            <li 
+                v-for="(item, index) in reversedItems" 
+                @click="togglePurchased(item)"
+                :key="item.id"
+                class="static-class"
+                :class="{
+                    strikeout: item.purchased, 
+                    priority: item.highPriority
+                }"
+            >
+                {{ item.label }}
+            </li>
+        </ul>
+        <p v-if="!items.length">
+            Nothing to see here
+        </p>
+    </div>
+</body>
+<script src="https://unpkg.com/vue@3"></script>
+<script src="./app.js"></script>
+</html>
